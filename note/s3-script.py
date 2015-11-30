@@ -13,6 +13,7 @@
 # limitations under the License.
 
 # Import the SDK
+
 import boto
 import uuid
 
@@ -25,13 +26,12 @@ import uuid
 # For more information about this interface to Amazon S3, see:
 # http://boto.readthedocs.org/en/latest/s3_tut.html
 s3 = boto.connect_s3()
-
 # Everything uploaded to Amazon S3 must belong to a bucket. These buckets are
 # in the global namespace, and must have a unique name.
 #
 # For more information about bucket name restrictions, see:
 # http://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
-bucket_name = "python-sdk-sample-%s" % uuid.uuid4()
+bucket_name = "python-sdk-sample-" % uuid.uuid4()
 print "Creating new bucket with name: " + bucket_name
 bucket = s3.create_bucket(bucket_name)
 
