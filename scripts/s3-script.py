@@ -55,7 +55,7 @@ print k.generate_url(expires_in_seconds)
 print 
 
 k.key = 'file_sample'
-k.set_contents_from_filename("todo.md")
+k.set_contents_from_filename("file-test.txt")
 
 print "Generating a public URL for the object we just uploaded. This URL will be active for %d seconds" % expires_in_seconds
 print
