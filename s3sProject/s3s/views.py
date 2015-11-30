@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import BucketLink
+from django.core.management import call_command
+from django.core import management
+from StringIO import StringIO
 
 # Create your views here.
 
@@ -12,7 +15,6 @@ def index(request):
     			}
     return render(request, 's3s/index.html', context)
 
-
 def admin(request):
 	admin = "Admin stuff"
 	index_link = "../"
@@ -20,9 +22,13 @@ def admin(request):
 				'index_link': index_link}
 	return render(request, 's3s/admin.html', context)
 
-
-
 def bucket(request):
     bucket = "Bucket stuff"
     context = {'bucket': bucket}
     return render(request, 's3s/bucket.html', context)
+
+def generate(request):
+    out = StringIO()
+    call_command('generateLink', stdout=out)
+    link = out.getvalue()
+    return HttpResponse(link)
