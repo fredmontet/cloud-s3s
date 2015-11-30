@@ -6,13 +6,21 @@ from .models import BucketLink
 
 def index(request):
     index = "Index stuff"
-    context = {'index': index}
+    form_dest = "./admin"
+    context = {	'index': index, 
+    			'form_dest': form_dest
+    			}
     return render(request, 's3s/index.html', context)
+
 
 def admin(request):
 	admin = "Admin stuff"
-	context = {'admin': admin}
+	index_link = "../"
+	context = {	'admin': admin,
+				'index_link': index_link}
 	return render(request, 's3s/admin.html', context)
+
+
 
 def bucket(request):
     bucket = "Bucket stuff"

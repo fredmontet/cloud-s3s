@@ -1,14 +1,22 @@
-{% extends "s3s/wrapper.html" %}
+{% extends "s3s/base.html" %}
 
 {% block content %}
-      <div class="starter-template">
-		{% if index %}
-		    <h1>{{ index }} starter template</h1>
-		{% else %}
-		    <h1>Bootstrap starter template</h1>
-		{% endif %}
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-      </div>
+  <div class="container-fluid">
+    {% block login %}
+      <form class="form-signin" action="{{form_dest}}">
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+	  {% endblock %}   
+  </div>   
 {% endblock %}
 
 
