@@ -27,8 +27,9 @@ def bucket(request):
     context = {'bucket': bucket}
     return render(request, 's3s/bucket.html', context)
 
-def generate(request):
+def manager(request):
+    action = request.GET.get("action")
     out = StringIO()
-    call_command('generateLink', stdout=out)
-    link = out.getvalue()
-    return HttpResponse(link)
+    call_command('s3Mgr',action, stdout=out)
+    result = out.getvalue()
+    return HttpResponse(result)
