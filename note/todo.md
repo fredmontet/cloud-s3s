@@ -27,7 +27,7 @@ TODO: Faire un bouton sur /admin pour télécharger le fichier
 TODO: Faire page /bucket?uuid()
 TODO: Faire une alerte du lien d'upload (qui pointe vers /bucket?uuid())
 TODO: Faire le bouton du lien d'upload
-TODO: Générer un bucket en Python
+TODO: Générer un bucket en Python (intégrer s3-script2.py)
 TODO: rendre ça dynamique, il faudra mettre dans la var?
 TODO: Créer un fichier plutôt que du texte
 TODO: Lier la page bucket avec la fonction d'upload Ajax
