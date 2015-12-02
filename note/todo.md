@@ -26,6 +26,7 @@ C'est fait!
 ### Prioritaire
 TODO: Faire un bouton sur /admin pour télécharger le fichier
 TODO: Utiliser la page /bucket?uuid=... 
+TODO: Faire le bouton du lien d'upload
 TODO: rendre ça dynamique, il faudra mettre dans la var?
 TODO: Créer un fichier plutôt que du texte
 TODO: Lier la page bucket avec la fonction d'upload Ajax
@@ -42,6 +43,6 @@ TODO: Faire page /bucket?uuid()
     Done
 
 ### Secondaire
-TODO: Générer un bucket en Python
+TODO: Générer un bucket en Python (intégrer s3-script2.py)
 
 
