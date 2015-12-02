@@ -185,7 +185,6 @@ function putBucketFile() {
 }
 
 function addRow(id, expiration_date, status, url, url_down){
-	console.log('the url is :', url_down);
 
   	$(".table").append('<tr id="bucket-'+id+'">\
 			<td>'+expiration_date+'</td>\
