@@ -5,6 +5,7 @@
 $( document ).ready(function() {
    
 	getBuckets();
+	upload();
 
 	AWS.config.update({accessKeyId: 'AKIAJHOXSZCIS73PIKPA', secretAccessKey: '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'});
 	AWS.config.region = 'eu-central-1';
@@ -79,6 +80,8 @@ function deleteUrl(id){
 
 function upload(){
 	console.log("upload");
+
+	
 }
 
 
@@ -90,6 +93,7 @@ function upload(){
 /*-----------------------------*/
 
 function listObjects(){
+	var params = {Bucket: 'bucketmanual'};
 	s3.listObjects(function (err, data) {
     if (err) {
         console.log('Could not load objects from S3');
@@ -124,12 +128,8 @@ function getBuckets(){
 	});
 }
 
-
-
 function getBucketCors() {
-
 	console.log('Getting CORS');
-
 	var params = {Bucket: 'bucketmanual'};
 	s3.getBucketCors(params, function(err, data) {
 	  if (err) console.log(err, err.stack); // an error occurred
@@ -138,10 +138,16 @@ function getBucketCors() {
 }
 
 function getBucketFile() {
+	var params = {Bucket: 'bucketmanual', Key: 'target.txt'};
+	var url = s3.getSignedUrl('getObject', params);
+	console.log(url);
+}
+
+function putBucketFile() {
 
 	var params = {Bucket: 'bucketmanual', Key: 'target.txt'};
 	var url = s3.getSignedUrl('getObject', params);
-	console.log('The URL is', url);
+	console.log(url);
 }
 
 
