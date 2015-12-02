@@ -36,18 +36,27 @@ function getUrl(){
 	// TODO: get the presigned url here instead of var data
 
 	var expires_in_seconds = 3600;
-	var key = 'target.txt'
-	var url = 'none'
+	var key = 'target2.txt'
+	var presignedUrl = 'none'
 
-	var params = {Bucket: 'bucketmanual', Key: key, Body: 'body'};
-	var url = s3.getSignedUrl('putObject', params);
-	console.log('The URL is', url);	
+	var params = {Bucket: 'bucketmanual', Key: key};
+	s3.getSignedUrl('putObject', params, function (err, url) {
+	  console.log('The URL is', url);
+	  presignedUrl = url;
+	});
 	
 	data = {
 	    "expires_in_seconds": expires_in_seconds,
-	    "url": url,
+	    "url": presignedUrl,
 	    "status": "empty"
 	}
+
+	$.ajax({
+	  url: presignedUrl, // the presigned URL
+	  type: 'PUT',
+	  data: 'data to upload into URL',
+	  success: function() { console.log('Uploaded data successfully.'); }
+	});
 
 	$.post('/api/buckets/', data, function(result) {
 		var id = result.id
