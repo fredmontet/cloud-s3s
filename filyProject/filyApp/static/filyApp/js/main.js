@@ -7,7 +7,7 @@ $( document ).ready(function() {
 	getBuckets();
 	upload();
 
-	AWS.config.update({accessKeyId: 'AKIAJHOXSZCIS73PIKPA', secretAccessKey: '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'});
+	AWS.config.update({accessKeyId: 'AKIAJUR2T2KVHZP47YEA', secretAccessKey: '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'});
 	AWS.config.region = 'eu-central-1';
 
 	s3 = new AWS.S3;
