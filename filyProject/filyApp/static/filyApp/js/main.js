@@ -9,6 +9,8 @@ $( document ).ready(function() {
 	AWS.config.region = 'eu-central-1';
 	s3 = new AWS.S3;
 
+
+
 });
 
 
@@ -71,6 +73,12 @@ function getUrl(){
     	var url = result.url;
     	var status = result.status;
     	addRow(id, expiration_date, status, url);
+	});
+}
+
+function uploadLink(id){
+	$.getJSON( "/api/buckets/"+id, function( data ) {
+	  	alert(data.url);
 	});
 }
 
@@ -167,27 +175,26 @@ function getBucketFile() {
 }
 
 function putBucketFile() {
-
 	var params = {Bucket: 'bucketmanual-fred', Key: 'target.txt'};
 	var url = s3.getSignedUrl('getObject', params);
 	console.log(url);
 }
 
-
 function addRow(id, expiration_date, status, url){
   	$(".table").append('<tr id="bucket-'+id+'">\
 			<td>'+expiration_date+'</td>\
             <td>'+status+'</td>\
-            <td><a href="'+url+'"><button type="button" class="btn btn-default btn-xs">Bucket link</button></a></td>\
+            <td>\
+            	<button onclick="uploadLink('+id+')" type="button" class="btn btn-default btn-xs">Upload link</button>\
+            </td>\
 			<td>\
 				<button onclick="downloadFile()" type="button" class="btn btn-default btn-xs">Download file</button>\
-				<button onclick="deleteUrl('+id+')" data-bucket-id="'+id+'" type="button" class="btn btn-default btn-xs">Delete</button>\
+				<button onclick="deleteUrl('+id+')" type="button" class="btn btn-default btn-xs">Delete</button>\
 			</td>\
-		</tr>')
+		</tr>');
 }
 
-function removeRow(id)
-{
+function removeRow(id){
 	$('#bucket-'+id).remove();
 }
 

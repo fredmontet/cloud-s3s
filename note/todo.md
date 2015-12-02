@@ -27,6 +27,7 @@ TODO: Faire un bouton sur /admin pour télécharger le fichier
 TODO: Faire page /bucket?uuid()
 TODO: Faire une alerte du lien d'upload (qui pointe vers /bucket?uuid())
 TODO: Faire le bouton du lien d'upload
+    Done mais pourrait être amélioré...
 TODO: Générer un bucket en Python
 TODO: rendre ça dynamique, il faudra mettre dans la var?
 TODO: Créer un fichier plutôt que du texte
