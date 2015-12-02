@@ -8,6 +8,7 @@ $( document ).ready(function() {
 	AWS.config.update({accessKeyId: 'AKIAJUR2T2KVHZP47YEA', secretAccessKey: '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'});
 	AWS.config.region = 'eu-central-1';
 	s3 = new AWS.S3;
+
 });
 
 
@@ -75,6 +76,12 @@ function getUrl(){
     	var url_down = result.url_down;
     	var status = result.status;
     	addRow(id, expiration_date, status, url, url_down);
+	});
+}
+
+function uploadLink(id){
+	$.getJSON( "/api/buckets/"+id, function( data ) {
+	  	alert(data.url);
 	});
 }
 
@@ -172,12 +179,10 @@ function getBucketFile() {
 }
 
 function putBucketFile() {
-
 	var params = {Bucket: bucket_name, Key: 'target.txt'};
 	var url = s3.getSignedUrl('getObject', params);
 	console.log(url);
 }
-
 
 function addRow(id, expiration_date, status, url, url_down){
 	console.log('the url is :', url_down);
@@ -185,16 +190,17 @@ function addRow(id, expiration_date, status, url, url_down){
   	$(".table").append('<tr id="bucket-'+id+'">\
 			<td>'+expiration_date+'</td>\
             <td>'+status+'</td>\
-            <td><a href="'+url+'"><button type="button" class="btn btn-default btn-xs">Bucket link</button></a></td>\
+            <td>\
+            	<button onclick="uploadLink('+id+')" type="button" class="btn btn-default btn-xs">Upload link</button>\
+            </td>\
 			<td>\
 				<a href="'+url_down+'"><button onclick="downloadFile()" type="button" class="btn btn-default btn-xs">Download file</button></a>\
 				<button onclick="deleteUrl('+id+')" data-bucket-id="'+id+'" type="button" class="btn btn-default btn-xs">Delete</button>\
 			</td>\
-		</tr>')
+		</tr>');
 }
 
-function removeRow(id)
-{
+function removeRow(id){
 	$('#bucket-'+id).remove();
 }
 
