@@ -4,7 +4,7 @@ from filyRest.models import Bucket
 class BucketSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Bucket
-        fields = ('id', 'uuid', 'created', 'expires_in_seconds', 'url', 'status')
+        fields = ('id', 'uuid', 'created', 'expires_in_seconds', 'url_up', 'url_down', 'status')
 
 """
 class BucketSerializer(serializers.Serializer):

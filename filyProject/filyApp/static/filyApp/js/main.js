@@ -3,12 +3,10 @@
 /*=============================*/
 
 $( document ).ready(function() {
-   
 	getBuckets();	
 	AWS.config.update({accessKeyId: 'AKIAJUR2T2KVHZP47YEA', secretAccessKey: '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'});
 	AWS.config.region = 'eu-central-1';
 	s3 = new AWS.S3;
-
 });
 
 
@@ -29,7 +27,7 @@ function getUrl(){
 
 	var expires_in_seconds = 3600;
 	var bucket_name = 'bucketmanual';
-	var key = 'targetLol.txt' // TODO: rendre ça dynamique, il faudra mettre dans la var?
+	var key = 'target.txt' // TODO: rendre ça dynamique, il faudra mettre dans la var?
 	var presignedUrl = 'none'
 	var params = {Bucket: bucket_name, Key: key, Expires: expires_in_seconds};
 
@@ -37,17 +35,12 @@ function getUrl(){
 	s3.getSignedUrl('putObject', params, function (err, url) {
 	  presignedUrl = url;
 	});
+
 	console.log('The URL to upload is', presignedUrl);
 
-	// testing
-	localStorage.setItem("presignedUrl", presignedUrl);
-	
 	// Get the presigned url to download file
-	var params = {
-		  Bucket: bucket_name, /* required */
-		  Key: 'targetLol.txt', /* required */
-	};	
 	var url_down = s3.getSignedUrl('getObject', params);
+
 	console.log('The URL to download is', url_down);
 
 	var data = {
@@ -57,6 +50,7 @@ function getUrl(){
 	    "status": "empty"
 	}
 
+	// Upload to S3
 	$.ajax({
 	  url: presignedUrl,
 	  type: 'PUT',
@@ -103,10 +97,6 @@ function deleteUrl(id){
 /*-----------------------------*/
 
 function upload(){
-
-	//Il faut passe le presignedUrl en GET dans le lien qu'on va donner, ou faire un attribut dans la bd
-	var presignedUrl = localStorage.getItem("presignedUrl");
-
 	$.ajax({
 	  url: presignedUrl,
 	  type: 'PUT',
@@ -115,7 +105,6 @@ function upload(){
 	  	console.log(result); 
 	  }
 	});
-	
 }
 
 
@@ -185,17 +174,18 @@ function putBucketFile() {
 }
 
 function addRow(id, expiration_date, status, url, url_down){
+
 	console.log('the url is :', url_down);
 
   	$(".table").append('<tr id="bucket-'+id+'">\
 			<td>'+expiration_date+'</td>\
             <td>'+status+'</td>\
             <td>\
-            	<button onclick="uploadLink('+id+')" type="button" class="btn btn-default btn-xs">Upload link</button>\
+            <button onclick="uploadLink('+id+')" type="button" class="btn btn-default btn-xs">Upload link</button>\
             </td>\
 			<td>\
-				<a href="'+url_down+'"><button onclick="downloadFile()" type="button" class="btn btn-default btn-xs">Download file</button></a>\
-				<button onclick="deleteUrl('+id+')" data-bucket-id="'+id+'" type="button" class="btn btn-default btn-xs">Delete</button>\
+			<a href="'+url_down+'"><button onclick="downloadFile()" type="button" class="btn btn-default btn-xs">Download file</button></a>\
+			<button onclick="deleteUrl('+id+')" data-bucket-id="'+id+'" type="button" class="btn btn-default btn-xs">Delete</button>\
 			</td>\
 		</tr>');
 }
