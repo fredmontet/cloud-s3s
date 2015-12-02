@@ -5,13 +5,13 @@
 $( document ).ready(function() {
    
 	getBuckets();
-	
+
+	AWS.config.update({accessKeyId: 'AKIAJHOXSZCIS73PIKPA', secretAccessKey: '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'});
+	AWS.config.region = 'eu-central-1';
+
+	s3 = new AWS.S3;
+
 });
-
-AWS.config.update({accessKeyId: 'AKIAJHOXSZCIS73PIKPA', secretAccessKey: '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'});
-AWS.config.region = 'eu-central-1';
-
-s3 = new AWS.S3;
 
 // var params = {
 // 	  Bucket: 'bucketmanual', /* required */
@@ -95,6 +95,30 @@ function upload(){
 //	Functions
 /*=============================*/
 
+//	AWS Function
+/*-----------------------------*/
+
+function listObjects(){
+	s3.listObjects(function (err, data) {
+    if (err) {
+        console.log('Could not load objects from S3');
+    } else {
+      console.log('Loaded ' + data.Contents.length + ' items from S3');
+
+      for (var i = 0; i < data.Contents.length; i++) {
+        console.log(data.Contents[i].Key);
+      }
+    }
+  });
+}
+
+
+//	Fily functions
+/*-----------------------------*/
+
+/**
+* Get the buckets from the API
+*/
 function getBuckets(){
 	$.getJSON( "/api/buckets", function( data ) {
 	  $.each(data, function(i,value){
@@ -108,6 +132,7 @@ function getBuckets(){
         });
 	});
 }
+
 
 
 function getBucketCors() {
@@ -129,7 +154,6 @@ function getBucketFile() {
 }
 
 
-
 function addRow(id, expiration_date, status, url){
   	$(".table").append('<tr id="bucket-'+id+'">\
 			<td>'+expiration_date+'</td>\
@@ -146,4 +170,5 @@ function removeRow(id)
 {
 	$('#bucket-'+id).remove();
 }
+
 
