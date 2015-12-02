@@ -1,35 +1,39 @@
-# Todo List
+# Todo
 
-1. Installe python 3.4.3
+## Requirements
 
-    sudo apt-get install python3
+# No full user account management
+C'est fait!
 
-    Python 3 a déjà virtualenv inclu donc pas besoin de l'installer
+# Assume one principal user
+C'est fait!
 
-2. Crée un virtualenv appelé "env" dans le dossier racine du projet s3s (là ou il y a aussi note, report, etc.)
+# Principal user can create temporary URLs to invite another user to deposit a file on the service
 
-    cd rootProjectFolder
-    python3 -m venv env
+- Faire le bouton du lien d'upload
+- Faire une alerte du lien d'upload (qui pointe vers /bucket?uuid())
 
-3. Démarre ton virtualenv
+# Invited user navigates to URL and sees customized page inviting him to upload file (no registration or authentication necessary)
 
-    source env/bin/activate
+- ça sera la page /bucket?uuid()
 
-4. Installe les packages de requirements.txt sur ton virtualenv avec la commande:
+# Principal user is able to see status for each URL generated (file has been uploaded or not) and download the file
 
-    pip install -r requirements.txt
+- Faire un bouton sur /admin pour télécharger le fichier
 
-5. Check si tout fonctionne
+## TODOs
 
-    cd s3sProject
-    python manage.py runserver
-
-    Normalement tu peux aller sur 
-
-        http://127.0.0.1:8000/
-
-    qui sera la page d'accueil, et tu peux aussi aller sur l'interface d'admin:
-
-        http://127.0.0.1:8000/admin
+TODO: Faire un bouton sur /admin pour télécharger le fichier
+TODO: Faire page /bucket?uuid()
+TODO: Faire une alerte du lien d'upload (qui pointe vers /bucket?uuid())
+TODO: Faire le bouton du lien d'upload
+TODO: Générer un bucket en Python
+TODO: rendre ça dynamique, il faudra mettre dans la var?
+TODO: Créer un fichier plutôt que du texte
+TODO: Lier la page bucket avec la fonction d'upload Ajax
+TODO: Status
+TODO: Préparer le déploiement
+TODO: Préparer la présentation
+TODO: Préparer la feuille de résumé
 
 

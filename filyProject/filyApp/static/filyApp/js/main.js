@@ -4,25 +4,12 @@
 
 $( document ).ready(function() {
    
-	getBuckets();
-	upload();
-
-	AWS.config.update({accessKeyId: 'AKIAJHOXSZCIS73PIKPA', secretAccessKey: '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'});
+	getBuckets();	
+	AWS.config.update({accessKeyId: 'AKIAI62PVLEIDCVMJPKQ', secretAccessKey: '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'});
 	AWS.config.region = 'eu-central-1';
-
 	s3 = new AWS.S3;
 
 });
-
-// var params = {
-// 	  Bucket: 'bucketmanual', /* required */
-// 	  //ACL: 'private | public-read | public-read-write | authenticated-read',
-// 	  //GrantFullControl: 'STRING_VALUE',
-// 	  //GrantRead: 'STRING_VALUE',
-// 	  //GrantReadACP: 'STRING_VALUE',
-// 	  //GrantWrite: 'STRING_VALUE',
-// 	  //GrantWriteACP: 'STRING_VALUE'
-// 	};
 
 
 /*=============================*/
@@ -34,31 +21,48 @@ $( document ).ready(function() {
 
 function getUrl(){
 
-	// TODO: get the presigned url here instead of var data
+	/*
+	Faire un tableau de correspondance entre une clé générée dynamiquement
+	et le nom des fichiers des utilisateurs pour que le tout soit hyper dynamique
+	TODO: Générer un bucket en Python
+	*/
 
 	var expires_in_seconds = 3600;
-	var key = 'target2.txt'
+	var key = 'targetLol.txt' // TODO: rendre ça dynamique, il faudra mettre dans la var?
 	var presignedUrl = 'none'
+	var params = {Bucket: 'bucketmanual-fred', Key: key, Expires: expires_in_seconds};
 
-	var params = {Bucket: 'bucketmanual', Key: key};
+	// Get the presigned url
 	s3.getSignedUrl('putObject', params, function (err, url) {
-	  console.log('The URL is', url);
 	  presignedUrl = url;
 	});
+
+	localStorage.setItem("presignedUrl", presignedUrl);
 	
-	data = {
+	var data = {
 	    "expires_in_seconds": expires_in_seconds,
 	    "url": presignedUrl,
 	    "status": "empty"
 	}
 
+	// For testing
+	//
+	// var data = {
+	//     "expires_in_seconds": expires_in_seconds,
+	//     "url": "http://www.google.com",
+	//     "status": "empty"
+	// }
+
 	$.ajax({
-	  url: presignedUrl, // the presigned URL
+	  url: presignedUrl,
 	  type: 'PUT',
 	  data: 'data to upload into URL',
-	  success: function() { console.log('Uploaded data successfully.'); }
+	  success: function(result) { 
+	  	console.log(result); 
+	  }
 	});
 
+	// Create the db entry
 	$.post('/api/buckets/', data, function(result) {
 		var id = result.id
 	    var created = new Date(result.created);
@@ -88,8 +92,18 @@ function deleteUrl(id){
 /*-----------------------------*/
 
 function upload(){
-	console.log("upload");
 
+	//Il faut passe le presignedUrl en GET dans le lien qu'on va donner, ou faire un attribut dans la bd
+	var presignedUrl = localStorage.getItem("presignedUrl");
+
+	$.ajax({
+	  url: presignedUrl,
+	  type: 'PUT',
+	  data: 'data to upload into URL',
+	  success: function(result) { 
+	  	console.log(result); 
+	  }
+	});
 	
 }
 
@@ -102,7 +116,7 @@ function upload(){
 /*-----------------------------*/
 
 function listObjects(){
-	var params = {Bucket: 'bucketmanual'};
+	var params = {Bucket: 'bucketmanual-fred'};
 	s3.listObjects(function (err, data) {
     if (err) {
         console.log('Could not load objects from S3');
@@ -139,7 +153,7 @@ function getBuckets(){
 
 function getBucketCors() {
 	console.log('Getting CORS');
-	var params = {Bucket: 'bucketmanual'};
+	var params = {Bucket: 'bucketmanual-fred'};
 	s3.getBucketCors(params, function(err, data) {
 	  if (err) console.log(err, err.stack); // an error occurred
 	  else     console.log(data);           // successful response
@@ -147,14 +161,14 @@ function getBucketCors() {
 }
 
 function getBucketFile() {
-	var params = {Bucket: 'bucketmanual', Key: 'target.txt'};
+	var params = {Bucket: 'bucketmanual-fred', Key: 'target.txt'};
 	var url = s3.getSignedUrl('getObject', params);
 	console.log(url);
 }
 
 function putBucketFile() {
 
-	var params = {Bucket: 'bucketmanual', Key: 'target.txt'};
+	var params = {Bucket: 'bucketmanual-fred', Key: 'target.txt'};
 	var url = s3.getSignedUrl('getObject', params);
 	console.log(url);
 }
