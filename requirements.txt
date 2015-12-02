@@ -1,9 +1,6 @@
-astroid==1.4.1
 boto==2.38.0
-colorama==0.3.3
 Django==1.8.7
-lazy-object-proxy==1.2.1
-pylint==1.5.0
-six==1.10.0
-uuid==1.30
-wrapt==1.10.5
+django-filter==0.11.0
+djangorestframework==3.3.1
+Markdown==2.6.5
+wheel==0.24.0
