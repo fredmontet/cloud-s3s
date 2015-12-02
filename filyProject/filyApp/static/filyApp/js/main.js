@@ -78,7 +78,7 @@ function getUrl(){
 
 function uploadLink(id){
 	$.getJSON( "/api/buckets/"+id, function( data ) {
-	  	alert(data.url);
+	  	alert(window.location.href+"bucket?uuid="+data.uuid);
 	});
 }
 
@@ -145,7 +145,7 @@ function listObjects(){
 /**
 * Get the buckets from the API
 */
-function getBuckets{
+function getBuckets(){
 	$.getJSON( "/api/buckets", function( data ) {
 	  $.each(data, function(i,value){
 	  		var id = value.id;

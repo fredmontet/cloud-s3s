@@ -23,12 +23,9 @@ C'est fait!
 
 ## TODOs
 
+### Prioritaire
 TODO: Faire un bouton sur /admin pour télécharger le fichier
-TODO: Faire page /bucket?uuid()
-TODO: Faire une alerte du lien d'upload (qui pointe vers /bucket?uuid())
-TODO: Faire le bouton du lien d'upload
-    Done mais pourrait être amélioré...
-TODO: Générer un bucket en Python
+TODO: Utiliser la page /bucket?uuid=... 
 TODO: rendre ça dynamique, il faudra mettre dans la var?
 TODO: Créer un fichier plutôt que du texte
 TODO: Lier la page bucket avec la fonction d'upload Ajax
@@ -36,5 +33,15 @@ TODO: Status
 TODO: Préparer le déploiement
 TODO: Préparer la présentation
 TODO: Préparer la feuille de résumé
+
+TODO: Faire une alerte du lien d'upload (qui pointe vers /bucket?uuid()) 
+    Done
+TODO: Faire le bouton du lien d'upload
+    Done mais pourrait être amélioré...
+TODO: Faire page /bucket?uuid()
+    Done
+
+### Secondaire
+TODO: Générer un bucket en Python
 
 
