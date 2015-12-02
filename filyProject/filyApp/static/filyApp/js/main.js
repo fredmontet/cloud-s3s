@@ -9,11 +9,23 @@ $( document ).ready(function() {
 });
 
 
-AWS.config.update({accessKeyId: 'AKIAIUV77YIHYNYG3RFQ', secretAccessKey: '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'});
-AWS.config.region = 'us-west-1';
+AWS.config.update({accessKeyId: 'AKIAJHOXSZCIS73PIKPA', secretAccessKey: '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'});
+AWS.config.region = 'eu-central-1';
 
 s3 = new AWS.S3;
 
+var params = {
+  Bucket: 'bucketauto', /* required */
+  //ACL: 'private | public-read | public-read-write | authenticated-read',
+  CreateBucketConfiguration: {
+    LocationConstraint: 'eu-central-1'
+  },
+  //GrantFullControl: 'STRING_VALUE',
+  //GrantRead: 'STRING_VALUE',
+  //GrantReadACP: 'STRING_VALUE',
+  //GrantWrite: 'STRING_VALUE',
+  //GrantWriteACP: 'STRING_VALUE'
+};
 
 /*=============================*/
 //	UI Actions
@@ -23,14 +35,34 @@ s3 = new AWS.S3;
 /*-----------------------------*/
 
 
-
 function getUrl(){
 
 	// TODO: get the presigned url here instead of var data
+
+	s3.listBuckets(function(err, data) {
+	  if (err) console.log(err, err.stack); // an error occurred
+	  else     console.log(data);           // successful response
+	});
+
+	s3.createBucket(params, function(err, data) {
+	  if (err) console.log(err, err.stack); // an error occurred
+	  else     console.log(data);           // successful response
+	});
+	console.log('Bucket created');
+
+	var expires_in_seconds = 3600;
+	var key = 'testkey'
+	var url = 'none'
+
+	/*
+	var params = {Bucket: 'bucketauto', Key: 'key', Body: 'body', Expires: expires_in_seconds};
+	var url = s3.getSignedUrl('putObject', params);
+	console.log('The URL is', url);
+	*/
 	data = {
-	    "expires_in_seconds": 4500,
-	    "url": "http://www.youtube.com",
-	    "status": "full"
+	    "expires_in_seconds": expires_in_seconds,
+	    "url": url,
+	    "status": "empty"
 	}
 
 	$.post('/api/buckets/', data, function(result) {
