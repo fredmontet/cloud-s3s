@@ -9,10 +9,21 @@ from django.core.management import call_command
 import boto
 
 
-class BucketList(generics.ListCreateAPIView):
-    queryset = Bucket.objects.all()
-    serializer_class = BucketSerializer
+class BucketList(generics.ListAPIView):
+	serializer_class = BucketSerializer
+	def get_queryset(self):
+		queryset = Bucket.objects.all()
+		uuid = self.request.query_params.get('uuid', None)
+		if uuid is not None:
+			queryset = queryset.filter(uuid=uuid)
+		return queryset
 
+	def post(self, request, format=None):
+		serializer = BucketSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BucketDetail(APIView):
     """
