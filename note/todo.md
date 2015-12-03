@@ -24,9 +24,7 @@ C'est fait!
 ## TODOs
 
 ### Prioritaire
-TODO: Faire un bouton sur /admin pour télécharger le fichier - DONE
 TODO: Utiliser la page /bucket?uuid=... 
-TODO: Faire le bouton du lien d'upload - DONE
 TODO: rendre ça dynamique, il faudra mettre dans la var?
 TODO: Créer un fichier plutôt que du texte
 TODO: Lier la page bucket avec la fonction d'upload Ajax
@@ -34,13 +32,15 @@ TODO: Status
 TODO: Préparer le déploiement
 TODO: Préparer la présentation
 TODO: Préparer la feuille de résumé
+TODO: Prise en charge des liens expirés (status == expired)
+TODO: Désactivation du bouton "Download file" lorsque le lien est expiré
 
-TODO: Faire une alerte du lien d'upload (qui pointe vers /bucket?uuid()) 
-    Done
-TODO: Faire le bouton du lien d'upload
-    Done mais pourrait être amélioré...
-TODO: Faire page /bucket?uuid()
-    Done
+
+DONE: Faire le bouton du lien d'upload - Pourrait être amélioré...
+DONE: Faire un bouton sur /admin pour télécharger le fichier
+DONE: Faire le bouton du lien d'upload
+DONE: Faire une alerte du lien d'upload (qui pointe vers /bucket?uuid())
+DONE: Faire page /bucket?uuid()
 
 ### Secondaire
 TODO: Générer un bucket en Python (intégrer s3-script2.py)
