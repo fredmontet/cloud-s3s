@@ -8,7 +8,6 @@ from StringIO import StringIO
 from django.core.management import call_command
 import boto
 
-
 class BucketList(generics.ListAPIView):
 	serializer_class = BucketSerializer
 	def get_queryset(self):
@@ -26,9 +25,6 @@ class BucketList(generics.ListAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BucketDetail(APIView):
-    """
-    Retrieve, update or delete a bucket instance.
-    """
     def get_object(self, pk):
         try:
             return Bucket.objects.get(pk=pk)
