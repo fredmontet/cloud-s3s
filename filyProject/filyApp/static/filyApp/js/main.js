@@ -6,17 +6,40 @@ $( document ).ready(function() {
 	getBuckets();	
 	AWS.config.update({accessKeyId: 'AKIAI62PVLEIDCVMJPKQ', secretAccessKey: '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'});
 	AWS.config.region = 'eu-central-1';
-	//AWS.config.signatureVersion = 'v4';
+	AWS.config.signatureVersion = 'v4';
 	s3 = new AWS.S3();
 
-	// Upload on click with file chooser value
-	$('#upload-btn').click(function() {
-		  var data = new FormData(),
-          files = $("#file-chooser").prop('files'),
-          file = files[0];
-          data.append('file', file);
-          upload(data);
+
+	var name;
+
+	$(':file').change(function(){
+	    var file = this.files[0];
+	    name = file.name;
+	    var size = file.size;
+	    var type = file.type;
+	    console.log("change");
+	    console.log(name);
+	    console.log(size);
+	    console.log(type);
+	    //Your validation
 	});
+
+
+	$(':button').click(function() {
+		  var data = new FormData($('form')[0]);
+          upload(data, name);
+	});
+
+	// $(':button').click(function() {
+	// 	  var data = new FormData();
+ //          //files = $("#file-chooser").prop('files');
+ //          files = $("#file-chooser");
+ //          console.log(files);
+ //          file = files[0];
+ //          data.append('file', file);
+ //          upload(data);
+	// });
+
 });
 
 
@@ -81,8 +104,38 @@ function uploadLink(id){
 	});
 }
 
-function downloadFile(){
+function downloadFile(id){
 	console.log("downloadFile");
+
+	/*
+	 * Get the presigned url in url_down by looking at the bd to find the bucket with a uuid
+	 */
+
+	// 1. Get the uuid from ???id;
+
+	// 2. Get the url_up from the bucket with the aforementionned uuid
+	var bucket = $.get("/api/buckets/"+id);
+
+	// 3. Upload the data! Ajaxception \o/
+	bucket.done(function(data0) {
+		$.ajax({
+		  url: data0.url_down,
+		  type: 'GET',
+		  }).done(function(data1) {
+		    console.log( "success" );
+		    window.location = data0.url_down;
+		  })
+		  .fail(function(data1) {
+		    console.log( "error" );
+		  })
+		  .always(function(data1) {
+		    console.log( "finished" );
+		  });  
+	});
+
+
+
+
 }
 
 function deleteUrl(id){
@@ -99,7 +152,7 @@ function deleteUrl(id){
 //	Bucket page actions
 /*-----------------------------*/
 
-function upload(file){
+function upload(file, name){
 
 	/*
 	 * Get the presigned url in url_up by looking at the bd to find the bucket with a uuid
@@ -112,25 +165,26 @@ function upload(file){
 	var bucket = $.get(bucket_url);
 
 	// 3. Upload the data! Ajaxception \o/
-	bucket.done(function(data) {
+	bucket.done(function(data0) {
 		$.ajax({
-		  url: data[0].url_up,
-          //contentType: "application/x-www-form-urlencoded",
+		  url: data0[0].url_up,
+		  type: 'PUT',
           data: file,
           cache: false,
           processData: false,
   		  contentType: false,
-		  type: 'PUT',
-		  }).done(function(data) {
+		  }).done(function(data1) {
 		    console.log( "success" );
 		  })
-		  .fail(function(data) {
+		  .fail(function(data1) {
 		    console.log( "error" );
 		  })
-		  .always(function(data) {
+		  .always(function(data1) {
 		    console.log( "finished" );
 		  });  
 	});
+
+
 
 	//TODO ajax to change the status of the link in admin
 
@@ -188,7 +242,7 @@ function addRow(id, expiration_date, status, url_up, url_down){
             <button onclick="uploadLink('+id+')" type="button" class="btn btn-default btn-xs">Upload link</button>\
             </td>\
 			<td>\
-			<a href="'+url_down+'"><button onclick="downloadFile()" type="button" class="btn btn-default btn-xs">Download file</button></a>\
+			<button onclick="downloadFile('+id+')" type="button" class="btn btn-default btn-xs">Download file</button>\
 			<button onclick="deleteUrl('+id+')" data-bucket-id="'+id+'" type="button" class="btn btn-default btn-xs">Delete</button>\
 			</td>\
 		</tr>');

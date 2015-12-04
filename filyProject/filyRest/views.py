@@ -24,7 +24,9 @@ class BucketList(generics.ListAPIView):
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class BucketDetail(APIView):
+
     def get_object(self, pk):
         try:
             return Bucket.objects.get(pk=pk)
@@ -37,7 +39,6 @@ class BucketDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-    	#s3 = boto.connect_s3()
         bucket = self.get_object(pk)
         serializer = BucketSerializer(bucket, data=request.data)
         if serializer.is_valid():
@@ -46,7 +47,6 @@ class BucketDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-    	#s3 = boto.connect_s3()
         bucket = self.get_object(pk)
         #Attention - un bucket doit etre vide pour etre supprime
         #s3.delete_bucket(bucket.uuid)
