@@ -133,6 +133,7 @@ function upload(file){
 	});
 
 	//TODO ajax to change the status of the link in admin
+
 }
 
 /*=============================*/
