@@ -9,36 +9,23 @@ $( document ).ready(function() {
 	AWS.config.signatureVersion = 'v4';
 	s3 = new AWS.S3();
 
-
-	var name;
+	var headerParams;
+	var file;
 
 	$(':file').change(function(){
-	    var file = this.files[0];
-	    name = file.name;
-	    var size = file.size;
-	    var type = file.type;
-	    console.log("change");
-	    console.log(name);
-	    console.log(size);
-	    console.log(type);
-	    //Your validation
-	});
+	    //file = this.files[0];
+	    var headerParams = {
+			"X-File-Name": this.files[0].name,
+	    	"X-File-Size": this.files[0].size,
+	    	"X-File-Type": this.files[0].type,
+    	}
 
+	});
 
 	$(':button').click(function() {
-		  var data = new FormData($('form')[0]);
-          upload(data, name);
+		  var data = new FormData($("#upload-form")[0]);
+          upload(data, headerParams);
 	});
-
-	// $(':button').click(function() {
-	// 	  var data = new FormData();
- //          //files = $("#file-chooser").prop('files');
- //          files = $("#file-chooser");
- //          console.log(files);
- //          file = files[0];
- //          data.append('file', file);
- //          upload(data);
-	// });
 
 });
 
@@ -105,18 +92,14 @@ function uploadLink(id){
 }
 
 function downloadFile(id){
-	console.log("downloadFile");
-
 	/*
-	 * Get the presigned url in url_down by looking at the bd to find the bucket with a uuid
+	 * Get the presigned url in url_down
 	 */
 
-	// 1. Get the uuid from ???id;
-
-	// 2. Get the url_up from the bucket with the aforementionned uuid
+	// 1. Get the bucket with its id
 	var bucket = $.get("/api/buckets/"+id);
 
-	// 3. Upload the data! Ajaxception \o/
+	// 2. Upload the data! Ajaxception \o/
 	bucket.done(function(data0) {
 		$.ajax({
 		  url: data0.url_down,
@@ -149,7 +132,7 @@ function deleteUrl(id){
 //	Bucket page actions
 /*-----------------------------*/
 
-function upload(file, name){
+function upload(file, params){
 
 	/*
 	 * Get the presigned url in url_up by looking at the bd to find the bucket with a uuid
@@ -167,9 +150,11 @@ function upload(file, name){
 		  url: data0[0].url_up,
 		  type: 'PUT',
           data: file,
+          dataType: 'text',
           cache: false,
           processData: false,
   		  contentType: false,
+  		  headers: params,
 		  }).done(function(data1) {
 		    console.log( "success" );
 		  })
@@ -180,9 +165,6 @@ function upload(file, name){
 		    console.log( "finished" );
 		  });  
 	});
-
-
-
 	//TODO ajax to change the status of the link in admin
 
 }
