@@ -132,11 +132,8 @@ function downloadFile(id){
 		    console.log( "finished" );
 		  });  
 	});
-
-
-
-
 }
+
 
 function deleteUrl(id){
  	$.ajax({
