@@ -4,7 +4,7 @@
 
 $( document ).ready(function() {
 	getBuckets();	
-	AWS.config.update({accessKeyId: 'AKIAI62PVLEIDCVMJPKQ', secretAccessKey: '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'});
+	AWS.config.update({accessKeyId: '', secretAccessKey: ''});
 	AWS.config.region = 'eu-central-1';
 	AWS.config.signatureVersion = 'v4';
 	s3 = new AWS.S3();
