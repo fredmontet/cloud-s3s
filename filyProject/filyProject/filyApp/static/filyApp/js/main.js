@@ -3,17 +3,47 @@
 /*=============================*/
 
 $( document ).ready(function() {
+<<<<<<< HEAD:filyProject/filyApp/static/filyApp/js/main.js
+
+
+	//	Login page DR
+	/*-----------------------------*/
+	
+	$('.login').click(function() {
+		setCred();
+	});
+
+	if(window.location.pathname != "/login"){
+		var akid = localStorage.getItem("accessKeyId");
+		var sak = localStorage.getItem("secretAccessKey");
+		AWS.config.update({accessKeyId: akid, secretAccessKey: sak});
+		AWS.config.region = 'eu-central-1';
+		AWS.config.signatureVersion = 'v4';
+		s3 = new AWS.S3();
+	}
+
+
+	//	Admin page DR
+	/*-----------------------------*/
+	
+	getBuckets();
+
+
+	//	Bucket page DR
+	/*-----------------------------*/
+=======
 	getBuckets();	
 	AWS.config.update({accessKeyId: '', secretAccessKey: ''});
 	AWS.config.region = 'eu-central-1';
 	AWS.config.signatureVersion = 'v4';
 	s3 = new AWS.S3();
+>>>>>>> 88faf03ed6d683b26dddd642559255982cc67326:filyProject/filyProject/filyApp/static/filyApp/js/main.js
 
 	var headerParams;
 	var file;
 
-	$(':file').change(function(){
-	    //file = this.files[0];
+	$('#file-chooser').change(function(){
+	    file = this.files[0];
 	    var headerParams = {
 			"X-File-Name": this.files[0].name,
 	    	"X-File-Size": this.files[0].size,
@@ -21,7 +51,7 @@ $( document ).ready(function() {
     	}
 	});
 
-	$(':button').click(function() {
+	$('#upload-btn').click(function() {
 		  var data = new FormData($("#upload-form")[0]);
           upload(data, headerParams);
 	});
@@ -86,7 +116,7 @@ function getUrl(){
 
 function uploadLink(id){
 	$.getJSON( "/api/buckets/"+id, function( data ) {
-	  	alert(window.location.href+"bucket?uuid="+data.uuid);
+	  	alert(window.location.origin+"/bucket?uuid="+data.uuid);
 	});
 }
 
@@ -172,25 +202,6 @@ function upload(file, params){
 //	Functions
 /*=============================*/
 
-//	AWS Function
-/*-----------------------------*/
-
-function listObjects(){
-	var params = {Bucket: bucket_name};
-	s3.listObjects(function (err, data) {
-    if (err) {
-        console.log('Could not load objects from S3');
-    } else {
-      console.log('Loaded ' + data.Contents.length + ' items from S3');
-
-      for (var i = 0; i < data.Contents.length; i++) {
-        console.log(data.Contents[i].Key);
-      }
-    }
-  });
-}
-
-
 //	Fily functions
 /*-----------------------------*/
 
@@ -250,4 +261,27 @@ function getUuid() {
     return v.toString(16);
 	});
 }
+
+function setCred(){
+	localStorage.setItem("accessKeyId", $(".akid").val());
+	localStorage.setItem("secretAccessKey", $(".sak").val());  	
+	return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
