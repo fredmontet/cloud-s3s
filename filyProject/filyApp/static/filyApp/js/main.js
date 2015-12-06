@@ -19,7 +19,6 @@ $( document ).ready(function() {
 	    	"X-File-Size": this.files[0].size,
 	    	"X-File-Type": this.files[0].type,
     	}
-
 	});
 
 	$(':button').click(function() {
