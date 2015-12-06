@@ -3,8 +3,6 @@
 /*=============================*/
 
 $( document ).ready(function() {
-<<<<<<< HEAD:filyProject/filyApp/static/filyApp/js/main.js
-
 
 	//	Login page DR
 	/*-----------------------------*/
@@ -31,13 +29,7 @@ $( document ).ready(function() {
 
 	//	Bucket page DR
 	/*-----------------------------*/
-=======
-	getBuckets();	
-	AWS.config.update({accessKeyId: '', secretAccessKey: ''});
-	AWS.config.region = 'eu-central-1';
-	AWS.config.signatureVersion = 'v4';
-	s3 = new AWS.S3();
->>>>>>> 88faf03ed6d683b26dddd642559255982cc67326:filyProject/filyProject/filyApp/static/filyApp/js/main.js
+
 
 	var headerParams;
 	var file;
