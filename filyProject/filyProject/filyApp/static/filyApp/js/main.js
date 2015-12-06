@@ -30,7 +30,6 @@ $( document ).ready(function() {
 	//	Bucket page DR
 	/*-----------------------------*/
 
-
 	var headerParams;
 	var file;
 
@@ -47,9 +46,7 @@ $( document ).ready(function() {
 		  var data = new FormData($("#upload-form")[0]);
           upload(data, headerParams);
 	});
-
 });
-
 
 /*=============================*/
 //	UI Actions
@@ -63,11 +60,10 @@ function getUrl(){
 	/*
 	Faire un tableau de correspondance entre une clé générée dynamiquement
 	et le nom des fichiers des utilisateurs pour que le tout soit hyper dynamique
-	TODO: Générer un bucket en Python
 	*/
 
 	var expires_in_seconds = 3600;
-	var bucket_name = 'bucketmanual-fred';
+	var bucket_name = localStorage.getItem("bucketName");
 	var uuid = getUuid();
 	var url_up = 'none';
 	var url_down = 'none';
@@ -138,7 +134,6 @@ function downloadFile(id){
 	});
 }
 
-
 function deleteUrl(id){
  	$.ajax({
     url: '/api/buckets/'+id,
@@ -178,6 +173,7 @@ function upload(file, params){
   		  headers: params,
 		  }).done(function(data1) {
 		    console.log( "success" );
+		    setStatus("full", data0[0]);
 		  })
 		  .fail(function(data1) {
 		    console.log( "error" );
@@ -186,8 +182,25 @@ function upload(file, params){
 		    console.log( "finished" );
 		  });  
 	});
-	//TODO ajax to change the status of the link in admin
+}
 
+function setStatus(status, bucket){
+		bucket.status = status;
+		$.ajax({
+		  url: "/api/buckets/"+bucket.id+"/",
+		  type: 'PUT',
+          data: JSON.stringify(bucket),
+  		  dataType: "json",
+  		  contentType: 'application/json; charset=UTF-8',
+		  }).done(function(data) {
+		    console.log( "success" );
+		  })
+		  .fail(function(data) {
+		    console.log( "error" );
+		  })
+		  .always(function(data) {
+		    console.log( "finished" );
+		  });  
 }
 
 /*=============================*/
@@ -233,9 +246,7 @@ function removeRow(id){
 	$('#bucket-'+id).remove();
 }
 
-
-function getUrlVars()
-{
+function getUrlVars(){
     var vars = [], hash;
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
     for(var i = 0; i < hashes.length; i++)
@@ -257,6 +268,7 @@ function getUuid() {
 function setCred(){
 	localStorage.setItem("accessKeyId", $(".akid").val());
 	localStorage.setItem("secretAccessKey", $(".sak").val());  	
+	localStorage.setItem("bucketName", $(".bn").val());
 	return true;
 }
 
