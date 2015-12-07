@@ -53,6 +53,10 @@ var LoginPage = {
     /* Page functions
     /*-----------------------------*/
 
+    /**
+     * Set the credentials in localStorage variables
+     * @returns {boolean}
+     */
     setCredentials: function () {
         localStorage.setItem("accessKeyId", s.accessKeyIdField.val());
         localStorage.setItem("secretAccessKey", s.secretAccessKeyField.val());
@@ -108,6 +112,11 @@ var AdminPage = {
     /* Page functions
     /*-----------------------------*/
 
+    /**
+     * Connect to Amazon Web Services according
+     * to localStorage variables
+     * @returns {a AWS s3 connection object}
+     */
     connectToAws: function () {
         var akid = localStorage.getItem("accessKeyId");
         var sak = localStorage.getItem("secretAccessKey");
@@ -118,6 +127,11 @@ var AdminPage = {
         return s3;
     },
 
+    /**
+     * Build a Fily Bucket
+     * This function takes the
+     * @returns {{bucket_name, uuid: *, expires_in_seconds: *, url_up: string, url_down: string, status: string}}
+     */
     buildBucket: function () {
 
         var expires_in_seconds = s.expiration.val();
