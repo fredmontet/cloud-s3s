@@ -163,25 +163,19 @@ var AdminPage = {
 
     addRow: function (id, expiration_date, status, isLinkExpired) {
 
-        var uploadLinkBtn;
-
-        // Désactiver le bouton d'upload si le lien est expiré
-        if(isLinkExpired){
-            disabled = "disabled=\"disabled\"";
-        }else{
-            disabled = null;
-        }
-
         // Affiche des couleurs pour signaler le status des fichiers
         switch(status) {
             case "empty":
                 var statusColor =  null;
+                var down_disabled = "disabled=\"disabled\"";
                 break;
             case "full":
-                var statusColor =  "success";
+                var statusColor = "success";
+
                 break;
             case "expired":
-                var statusColor =  "danger";
+                var statusColor = "danger";
+                var up_disabled = "disabled=\"disabled\"";
                 break;
         }
 
@@ -189,10 +183,10 @@ var AdminPage = {
             <td>' + expiration_date + '</td>\
             <td>' + status + '</td>\
             <td>\
-            <button onclick="AdminPage.uploadLinkBtn('+id+')" type="button" '+disabled+' class="upload-link-btn btn btn-default btn-xs">Upload link</button>\
+            <button onclick="AdminPage.uploadLinkBtn('+id+')" type="button" '+up_disabled+' class="upload-link-btn btn btn-default btn-xs">Upload link</button>\
             </td>\
             <td>\
-            <button onclick="AdminPage.downloadFileBtn('+id+')" type="button" class="download-file-btn btn btn-default btn-xs">Download file</button>\
+            <button onclick="AdminPage.downloadFileBtn('+id+')" type="button" '+down_disabled+' class="download-file-btn btn btn-default btn-xs">Download file</button>\
             <button onclick="AdminPage.deleteUrlBtn('+id+')" type="button" class="delete-url-btn btn btn-default btn-xs pull-right">Delete</button>\
             </td>\
             </tr>');
@@ -258,12 +252,33 @@ var AdminPage = {
     },
 
     deleteUrl: function (id) {
-        $.ajax({
-            url: '/api/buckets/' + id,
-            type: 'DELETE',
-            success: function (result) {
-                AdminPage.removeRow(id);
-            }
+
+        // 1. Get the bucket with its id
+        var bucket = $.get("/api/buckets/" + id);
+
+        // 2. Delete the data! Ajaxception \o/
+        bucket.done(function (data) {
+
+            var params = {
+                Bucket: data.bucket_name,
+                Key: data.uuid,
+            };
+
+            // Delete on s3
+            s.s3conn.deleteObject(params, function(err, datas3) {
+                if (err) console.log(err, err.stack);
+                else     console.log(datas3);
+            });
+
+            // Delete on Fily
+            $.ajax({
+                url: '/api/buckets/' + id,
+                type: 'DELETE',
+                success: function (result) {
+                    console.log(result);
+                    AdminPage.removeRow(id);
+                }
+            });
         });
     },
 
