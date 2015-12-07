@@ -74,6 +74,7 @@ var AdminPage = {
         downloadFileBtn: $(".download-file-btn"),
         deleteUrlBtn: $(".delete-url-btn"),
         bucketTable: $("#table"),
+        expiration: $("#expiration"),
         s3conn: null,
     },
 
@@ -119,7 +120,7 @@ var AdminPage = {
 
     buildBucket: function () {
 
-        var expires_in_seconds = 3600;
+        var expires_in_seconds = s.expiration.val();
         var bucket_name = localStorage.getItem("bucketName");
         var uuid = this.getUuid();
         var url_up = 'none';
@@ -149,6 +150,10 @@ var AdminPage = {
         return data;
     },
 
+    isLinkExpired: function (expirationDate) {
+        return (expirationDate < new Date());
+    },
+
     getUuid: function () {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = crypto.getRandomValues(new Uint8Array(1))[0] % 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -156,18 +161,43 @@ var AdminPage = {
         });
     },
 
-    addRow: function (id, expiration_date, status) {
-        $(".table").append('<tr id="bucket-'+ id +'" class="bucket-row" data-bucket-id="' + id + '">\
+    addRow: function (id, expiration_date, status, isLinkExpired) {
+
+        var uploadLinkBtn;
+
+        // Désactiver le bouton d'upload si le lien est expiré
+        if(isLinkExpired){
+            disabled = "disabled=\"disabled\"";
+        }else{
+            disabled = null;
+        }
+
+        // Affiche des couleurs pour signaler le status des fichiers
+        switch(status) {
+            case "empty":
+                var statusColor =  null;
+                break;
+            case "full":
+                var statusColor =  "success";
+                break;
+            case "expired":
+                var statusColor =  "danger";
+                break;
+        }
+
+        $(".table").append('<tr id="bucket-'+ id +'" class="bucket-row '+statusColor+' data-bucket-id="' + id + '">\
             <td>' + expiration_date + '</td>\
             <td>' + status + '</td>\
             <td>\
-            <button onclick="AdminPage.uploadLinkBtn('+id+')" type="button" class="upload-link-btn btn btn-default btn-xs">Upload link</button>\
+            <button onclick="AdminPage.uploadLinkBtn('+id+')" type="button" '+disabled+' class="upload-link-btn btn btn-default btn-xs">Upload link</button>\
             </td>\
             <td>\
             <button onclick="AdminPage.downloadFileBtn('+id+')" type="button" class="download-file-btn btn btn-default btn-xs">Download file</button>\
-            <button onclick="AdminPage.deleteUrlBtn('+id+')" type="button" class="delete-url-btn btn btn-default btn-xs">Delete</button>\
+            <button onclick="AdminPage.deleteUrlBtn('+id+')" type="button" class="delete-url-btn btn btn-default btn-xs pull-right">Delete</button>\
             </td>\
             </tr>');
+
+
     },
 
     removeRow: function (id) {
@@ -181,14 +211,29 @@ var AdminPage = {
     getBuckets: function () {
         $.getJSON("/api/buckets", function (data) {
             $.each(data, function (i, value) {
-                var id = value.id;
+
+                var bucket = {
+                    "id": value.id,
+                    "bucket_name": value.bucket_name,
+                    "uuid": value.uuid,
+                    "expires_in_seconds": value.expires_in_seconds,
+                    "url_up": value.url_up,
+                    "url_down": value.url_down,
+                    "status": value.status,
+                }
+
+                // Calcul de la date d'expiration
                 var created = new Date(value.created);
-                var expires_in_seconds = value.expires_in_seconds;
                 var expiration_date = new Date(created.getTime() + value.expires_in_seconds * 1000);
-                var url_up = value.url_up;
-                var url_down = value.url_down;
-                var status = value.status;
-                AdminPage.addRow(id, expiration_date, status, url_up, url_down);
+                var isExpired = AdminPage.isLinkExpired(expiration_date);
+
+                // Ajustement des status
+                if(isExpired){
+                    BucketPage.setStatus("expired", bucket);
+                    bucket.status = "expired";
+                }
+
+                AdminPage.addRow(bucket.id, expiration_date, bucket.status, isExpired);
             });
         });
     },
