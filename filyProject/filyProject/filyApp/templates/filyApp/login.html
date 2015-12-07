@@ -4,20 +4,20 @@
 
 <div class="container">
 
-      <form class="form-signin" action="./admin">
+    <form class="form-signin" action="./admin">
         <h2 class="form-signin-heading">Please sign in</h2>
 
         <label for="inputEmail" class="sr-only">AWS Access Key ID</label>
         <input type="akid" class="akid form-control" placeholder="AWS Access Key ID" required>
-        
+
         <label for="inputPassword" class="sr-only">AWS Secret Access Key</label>
         <input type="sak" class="sak form-control" placeholder="AWS Secret Access Key" required>
-        
+
         <label for="inputBucket" class="sr-only">AWS Bucket Name</label>
         <input type="bn" class="bn form-control" placeholder="AWS Bucket Name" required>
-        
-        <button id="login-btn" class="login btn btn-primary btn-block" type="submit">Sign in</button>
-      </form>
+
+        <button onclick="LoginPage.loginBtn()" id="login-btn" class="login btn btn-primary btn-block" type="submit">Sign in</button>
+    </form>
 
 </div> <!-- /container -->
 
